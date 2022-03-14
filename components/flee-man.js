@@ -1,12 +1,22 @@
 class FleeMan extends HTMLElement {
 	connectedCallback() {
-		const html = `
-			<canvas id="playarea" width="450" height="450">
+		this.screenWidth = 450;
+		this.screenHeight = 450;
+		this.avatarWidth = 50;
+		this.avatarHeight = 50;
+		this.blockWidth = 50;
+		this.blockHeight = 50;
+		this.playWidth = this.screenWidth - this.avatarWidth;
+		this.playHeight = this.screenHeight - this.avatarHeight;
+		this.blockColor = 'rgb(0, 0, 200)';
+		this.avatarColor = 'rgb(200, 0, 0)';
+
+		this.innerHTML = `
+			<canvas id="playarea" width="${this.screenWidth}" height="${this.screenHeight}">
 				Canvas elements are required (2d context).
 			</canvas>
 			<p>Score: <span id="score"></span></p>
-			<h2 id="gameover">&nbsp;</h2>`;
-		const css = `
+			<h2 id="gameover">&nbsp;</h2>
 			<style>
 				canvas#playarea {
 					background-color: LightGray;
@@ -15,93 +25,95 @@ class FleeMan extends HTMLElement {
 				}
 			</style>`;
 
-		this.innerHTML = `${html}${css}`;
-
 		let canvas = this.querySelector('#playarea');
 		if(!canvas.getContext) {
-			console.log('flee-man: canvas.getContext not supported: ',
-				canvas);
+			console.log('canvas.getContext is required ', canvas);
 			return;
 		}
 
 		this.context = canvas.getContext('2d');
-		this.reset();
-		document.addEventListener('keydown', (e) => this.event_down(e));
-		document.addEventListener('keyup', (e) => this.event_up(e));
+		this.newGame();
+		document.addEventListener('keydown', (e) => this.keyDown(e));
+		document.addEventListener('keyup', (e) => this.keyUp(e));
 	}
 
-	reset() {
+	newGame() {
 		this.querySelector('#gameover').innerHTML = '&nbsp;';
-		this.context.clearRect(0, 0, 450, 450);
-		this.obj = {
+		this.context.clearRect(0, 0, this.screenWidth, this.screenHeight);
+		this.avatar = {
 			x: 0,
-			y: 400,
+			y: this.playHeight,
 			xinc: 0,
-			w: 50,
-			h: 50,
+			w: this.avatarWidth,
+			h: this.avatarHeight,
 			inc: 10,
 			dec: -10,
 		};
-		this.objs = [];
+		this.blocks = [];
 		this.running = true;
 		this.score = 0;
 		this.blocks_cnt = 0;
 
-		if(this.blocks)
-			window.clearInterval(this.blocks);
+		if(this.blockInterval)
+			window.clearInterval(this.blockInterval);
 
-		this.blocks = window.setTimeout(() => this.adder(), 1000);
+		this.blockInterval = window.setTimeout(() => this.addBlock(), 1000);
 		window.requestAnimationFrame(() => this.render());
 	}
 
-	adder() {
+	addBlock() {
 		if(!this.running)
 			return;
 
-		let obj = {
-			x: Math.floor(Math.random() * 400),
+		let newBlock = {
+			x: Math.floor(Math.random() * this.playWidth),
 			y: 0,
 			yinc: 0,
-			w: 50,
-			h: 50,
+			w: this.blockWidth,
+			h: this.blockHeight,
 			inc: 10
 		};
-		this.objs.push(obj);
+		this.blocks.push(newBlock);
 		this.blocks_cnt++;
 
 		let time = 5000 - this.blocks_cnt * 10;
 		if(time < 100)
 			time = 100;
-		this.blocks = window.setTimeout(() => this.adder(), time);
+		this.blockInterval = window.setTimeout(() => this.addBlock(), time);
 	}
 
 	render() {
 		if(!this.running)
 			return;
 
-		this.context.clearRect(this.obj.x, this.obj.y, this.obj.w, this.obj.h);
-		this.obj.x += this.obj.xinc;
-		if(this.obj.x > 400)
-			this.obj.x = 400;
-		else if (this.obj.x < 0)
-			this.obj.x = 0;
-		this.context.fillStyle = 'rgb(200, 0, 0)';
-		this.context.fillRect(this.obj.x, this.obj.y, this.obj.w, this.obj.h);
+		// Clear old player avatar
+		this.context.clearRect(this.avatar.x, this.avatar.y, this.avatar.w, this.avatar.h);
+		// Set new x value
+		this.avatar.x += this.avatar.xinc;
+		
+		// Can't be off the screen
+		this.avatar.x = Math.min(this.playWidth, this.avatar.x);
+		this.avatar.x = Math.max(0, this.avatar.x);
 
-		for(let i = 0; i < this.objs.length; i++) {
-			let objs = this.objs[i];
-			this.context.clearRect(objs.x, objs.y, objs.w, objs.h);
-			objs.y += objs.inc;
-			if(objs.y <= 400) {
-				this.context.fillStyle = 'rgb(0, 0, 200)';
-				this.context.fillRect(objs.x, objs.y, objs.w, objs.h);
+		// Draw avatar at new location
+		this.context.fillStyle = this.avatarColor;
+		this.context.fillRect(this.avatar.x, this.avatar.y, this.avatar.w, this.avatar.h);
+
+		// Draw existing blocks
+		for(let i = 0; i < this.blocks.length; i++) {
+			let block = this.blocks[i];
+			this.context.clearRect(block.x, block.y, block.w, block.h);
+			block.y += block.inc;
+			if(block.y <= this.playHeight) {
+				this.context.fillStyle = this.blockColor;
+				this.context.fillRect(block.x, block.y, block.w, block.h);
 			}
 
-			if(this.obj.y < objs.y + objs.h) {
-				if(objs.y <= 400
-				&& !(this.obj.x > objs.x + objs.w
-				|| this.obj.x + this.obj.w < objs.x)) {
-					console.log('flee-man collision: ', this.obj, ' | ', objs);
+			if(this.avatar.y < block.y + block.h) {
+				if(block.y <= this.playHeight
+				&& !(this.avatar.x > block.x + block.w
+				|| this.avatar.x + this.avatar.w < block.x)) {
+					console.log('flee-man collision: ', this.avatar, ' | ', block);
 					this.running = false;
 					this.querySelector('#gameover').innerHTML = 'Game Over';
 					return;
@@ -109,55 +121,56 @@ class FleeMan extends HTMLElement {
 			}
 		}
 
-		while(this.objs.length > 0 && this.objs[0].y > 400) {
+		// Blocks that hit the avatar
+		while(this.blocks.length > 0 && this.blocks[0].y > this.playHeight) {
 			this.score++;
-			this.objs.shift();
+			this.blocks.shift();
 		}
 
 		this.querySelector('#score').innerHTML = this.score;
 		window.requestAnimationFrame(() => this.render());
 	}
 
-	event_down(ev) {
+	keyDown(ev) {
 		if(ev.defaultPrevented)
 			return;
 
 		const key = ev.key;
 		switch(key) {
-		case 'ArrowRight':
-			this.obj.xinc = this.obj.inc;
-			break;
-		case 'ArrowLeft':
-			this.obj.xinc = this.obj.dec;
-			break;
-		case ' ':
-			if(!this.running)
-				this.reset();
-			break;
-		default:
-			return;
+			case 'ArrowRight':
+				this.avatar.xinc = this.avatar.inc;
+				break;
+			case 'ArrowLeft':
+				this.avatar.xinc = this.avatar.dec;
+				break;
+			case ' ':
+				if(!this.running)
+					this.newGame();
+				break;
+			default:
+				return;
 		}
 
 		ev.preventDefault();
 	}
 
-	event_up(ev) {
+	keyUp(ev) {
 		if(ev.defaultPrevented)
 			return;
 
 		const key = ev.key;
 
 		switch(key) {
-		case 'ArrowRight':
-			if(this.obj.xinc == this.obj.inc)
-				this.obj.xinc = 0;
-			break;
-		case 'ArrowLeft':
-			if(this.obj.xinc == this.obj.dec)
-				this.obj.xinc = 0;
-			break;
-		default:
-			return;
+			case 'ArrowRight':
+				if(this.avatar.xinc == this.avatar.inc)
+					this.avatar.xinc = 0;
+				break;
+			case 'ArrowLeft':
+				if(this.avatar.xinc == this.avatar.dec)
+					this.avatar.xinc = 0;
+				break;
+			default:
+				return;
 		}
 
 		ev.preventDefault();
