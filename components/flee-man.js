@@ -1,4 +1,4 @@
-export default class Fallblock extends HTMLElement {
+class FleeMan extends HTMLElement {
 	connectedCallback() {
 		const html = `
 			<canvas id="playarea" width="450" height="450">
@@ -19,7 +19,7 @@ export default class Fallblock extends HTMLElement {
 
 		let canvas = this.querySelector('#playarea');
 		if(!canvas.getContext) {
-			console.log('fallblock: canvas.getContext not supported: ',
+			console.log('flee-man: canvas.getContext not supported: ',
 				canvas);
 			return;
 		}
@@ -101,7 +101,7 @@ export default class Fallblock extends HTMLElement {
 				if(objs.y <= 400
 				&& !(this.obj.x > objs.x + objs.w
 				|| this.obj.x + this.obj.w < objs.x)) {
-					console.log('fallblock collision: ', this.obj, ' | ', objs);
+					console.log('flee-man collision: ', this.obj, ' | ', objs);
 					this.running = false;
 					this.querySelector('#gameover').innerHTML = 'Game Over';
 					return;
@@ -164,6 +164,6 @@ export default class Fallblock extends HTMLElement {
 	}
 }
 
-if(!customElements.get('damikin-fallblock'))
-	customElements.define('damikin-fallblock', Fallblock);
+if(!customElements.get('flee-man'))
+	customElements.define('flee-man', FleeMan);
 
