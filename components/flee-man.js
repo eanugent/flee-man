@@ -1,6 +1,6 @@
 class FleeMan extends HTMLElement {
 	connectedCallback() {
-		this.screenWidth = 450;
+		this.screenWidth = 468;
 		this.screenHeight = 450;
 		this.avatarWidth = 50;
 		this.avatarHeight = 50;
@@ -8,8 +8,8 @@ class FleeMan extends HTMLElement {
 		this.blockHeight = 50;
 		this.playWidth = this.screenWidth - this.avatarWidth;
 		this.playHeight = this.screenHeight - this.avatarHeight;
-		this.blockColor = 'rgb(0, 0, 200)';
-		this.avatarColor = 'rgb(200, 0, 0)';
+		this.blockColor = 'rgb(255, 255, 0)';
+		this.avatarColor ='rgb(128,0,128)' ;
 
 		this.innerHTML = `
 			<canvas id="playarea" width="${this.screenWidth}" height="${this.screenHeight}">
@@ -19,9 +19,9 @@ class FleeMan extends HTMLElement {
 			<h2 id="gameover">&nbsp;</h2>
 			<style>
 				canvas#playarea {
-					background-color: LightGray;
+					background-color: blue;
 					border: solid 0.3em;
-					border-color: black;
+					border-color: yellow;
 				}
 			</style>`;
 
@@ -76,7 +76,7 @@ class FleeMan extends HTMLElement {
 		this.blocks.push(newBlock);
 		this.blocks_cnt++;
 
-		let time = 5000 - this.blocks_cnt * 10;
+		let time = 1000 - this.blocks_cnt * 10;
 		if(time < 100)
 			time = 100;
 		this.blockInterval = window.setTimeout(() => this.addBlock(), time);
