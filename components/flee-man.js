@@ -19,7 +19,10 @@ class FleeMan extends HTMLElement {
 			<h2 id="gameover">&nbsp;</h2>
 			<style>
 				canvas#playarea {
-					background-color: blue;
+					background-image: url("./images/black-heros.jpg");
+					background-size: cover;
+					background-position: center; /* Center the image */
+  					background-repeat: no-repeat; /* Do not repeat the image */
 					border: solid 0.3em;
 					border-color: yellow;
 				}
@@ -32,6 +35,7 @@ class FleeMan extends HTMLElement {
 		}
 
 		this.context = canvas.getContext('2d');
+
 		this.newGame();
 		document.addEventListener('keydown', (e) => this.keyDown(e));
 		document.addEventListener('keyup', (e) => this.keyUp(e));
