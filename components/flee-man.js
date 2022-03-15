@@ -9,7 +9,7 @@ class FleeMan extends HTMLElement {
 		this.playWidth = this.screenWidth - this.avatarWidth;
 		this.playHeight = this.screenHeight - this.avatarHeight;
 		this.blockColor = 'rgb(255, 255, 0)';
-		this.avatarColor ='rgb(128,0,128)' ;
+		this.avatarColor ='rgb(128, 128, 0)';
 
 		this.innerHTML = `
 			<canvas id="playarea" width="${this.screenWidth}" height="${this.screenHeight}">
