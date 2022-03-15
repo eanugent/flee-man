@@ -1,6 +1,6 @@
 class FleeMan extends HTMLElement {
 	connectedCallback() {
-		this.screenWidth = 768;
+		this.screenWidth = 468;
 		this.screenHeight = 450;
 		this.avatarWidth = 50;
 		this.avatarHeight = 50;
