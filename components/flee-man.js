@@ -1,7 +1,6 @@
-class FleeMan extends HTMLElement {
-	connectedCallback() {
-		this.screenWidth = 1200;
-		
+class FleeMan {
+	initialize() {
+		this.screenWidth = 1200;	
 		this.screenHeight = 450;
 		this.avatarWidth = 50;
 		this.avatarHeight = 50;
@@ -12,38 +11,21 @@ class FleeMan extends HTMLElement {
 		this.blockColor = 'rgb(255, 255, 0)';
 		this.avatarColor ='rgb(128, 128, 0)';
 
-		this.innerHTML = `
-			<canvas id="playarea" width="${this.screenWidth}" height="${this.screenHeight}">
-				Canvas elements are required (2d context).
-			</canvas>
-			<p>Score: <span id="score"></span></p>
-			<h2 id="gameover">&nbsp;</h2>
-			<style>
-				canvas#playarea {
-					background-image: url("./images/black-heros.jpg");
-					background-size: cover;
-					background-position: center; /* Center the image */
-  					background-repeat: no-repeat; /* Do not repeat the image */
-					border: solid 0.3em;
-					border-color: yellow;
-				}
-			</style>`;
-
-		let canvas = this.querySelector('#playarea');
+		let canvas = document.querySelector('#playarea');
 		if(!canvas.getContext) {
 			console.log('canvas.getContext is required ', canvas);
 			return;
 		}
-
 		this.context = canvas.getContext('2d');
 
-		this.newGame();  
 		document.addEventListener('keydown', (e) => this.keyDown(e));
 		document.addEventListener('keyup', (e) => this.keyUp(e));
+
+		this.newGame();
 	}
 
 	newGame() {
-		this.querySelector('#gameover').innerHTML = '&nbsp;';
+		document.querySelector('#gameover').innerHTML = '&nbsp;';
 		this.context.clearRect(0, 0, this.screenWidth, this.screenHeight);
 		this.avatar = {
 			x: 0,
@@ -132,7 +114,7 @@ class FleeMan extends HTMLElement {
 			this.blocks.shift();
 		}
 
-		this.querySelector('#score').innerHTML = this.score;
+		document.querySelector('#score').innerHTML = this.score;
 		window.requestAnimationFrame(() => this.render());
 	}
 
@@ -182,6 +164,8 @@ class FleeMan extends HTMLElement {
 	}
 }
 
-if(!customElements.get('flee-man'))
-	customElements.define('flee-man', FleeMan);
-
+let myGame = null;
+window.onload = function(){
+	myGame = new FleeMan();
+	myGame.initialize();
+}

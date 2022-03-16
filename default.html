@@ -12,8 +12,21 @@
 	<a href="/">Home</a>
 	<h1>FleeMan</h1>
 	<hr />
-	<flee-man />
-
+	<canvas id="playarea" width="1200" height="450">
+		Canvas elements are required (2d context).
+	</canvas>
+	<p>Score: <span id="score"></span></p>
+	<h2 id="gameover">&nbsp;</h2>
+	<style>
+		canvas#playarea {
+			background-image: url("./images/black-heros.jpg");
+			background-size: cover;
+			background-position: center; /* Center the image */
+			  background-repeat: no-repeat; /* Do not repeat the image */
+			border: solid 0.3em;
+			border-color: yellow;
+		}
+	</style>
 	<hr />
 	<p>Controls:</p>
 	<ul>
@@ -24,7 +37,7 @@
 	<p>Use the bottom
 		<b>Red Block</b>
 		to avoid the falling
-		<b>Blue Blocks</b>.</p>
+		<b>Blue Blocks</b>.</p>	
 </body>
 </html>
 
