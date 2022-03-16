@@ -1,6 +1,7 @@
 class FleeMan extends HTMLElement {
 	connectedCallback() {
-		this.screenWidth = 468;
+		this.screenWidth = 1200;
+		
 		this.screenHeight = 450;
 		this.avatarWidth = 50;
 		this.avatarHeight = 50;
@@ -36,7 +37,7 @@ class FleeMan extends HTMLElement {
 
 		this.context = canvas.getContext('2d');
 
-		this.newGame();
+		this.newGame();  
 		document.addEventListener('keydown', (e) => this.keyDown(e));
 		document.addEventListener('keyup', (e) => this.keyUp(e));
 	}
