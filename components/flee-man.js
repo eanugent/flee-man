@@ -11,6 +11,7 @@ class FleeMan {
 		this.blockColor = 'rgb(255, 255, 0)';
 		this.avatarColor ='rgb(255, 0, 0)';
 		this.highScore = 0;
+		this.level = 1;
 
 		let canvas = document.querySelector('#playarea');
 		if(!canvas.getContext) {
@@ -41,11 +42,20 @@ class FleeMan {
 		this.running = true;
 		this.score = 0;
 		this.blocks_cnt = 0;
+		this.level = 1;
 
 		if(this.blockInterval)
 			window.clearInterval(this.blockInterval);
 
 		this.blockInterval = window.setTimeout(() => this.addBlock(), 1000);
+
+		if(this.levelInterval)
+			window.clearInterval(this.levelInterval);
+
+		this.levelInterval = window.setInterval(() => {
+			this.level = this.level + 1;
+		}, 6 * 1000);
+
 		window.requestAnimationFrame(() => this.render());
 	}
 
@@ -63,7 +73,7 @@ class FleeMan {
 		};
 		this.blocks.push(newBlock);
 		this.blocks_cnt++;
-		let time = 1000 - this.blocks_cnt * 10;
+		let time = 1066 - (66 * this.level) - this.blocks_cnt * 10;
 		if(time < 100)
 			time = 100;
 		this.blockInterval = window.setTimeout(() => this.addBlock(), time);
@@ -112,13 +122,14 @@ class FleeMan {
 			}
 		}
 
-		// Blocks that hit the avatar
+		// Blocks that hit the ground
 		while(this.blocks.length > 0 && this.blocks[0].y > this.playHeight) {
 			this.score = this.score + 1;
 			this.blocks.shift();
+			document.querySelector('#score').innerHTML = this.score;
 		}
-
-		document.querySelector('#score').innerHTML = this.score;
+		
+		document.querySelector('#level').innerHTML = this.level;
 		window.requestAnimationFrame(() => this.render());
 	}
 

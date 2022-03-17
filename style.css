@@ -6,3 +6,15 @@ body {
 :link { color: #BAD7FF; }
 :visited { color: #F6BAFF; }
 
+.game-container {
+   display: flex;
+}
+
+.game-canvas {
+    flex: 1;
+}  
+
+.game-info {
+	flex: 2;
+	margin-left: 15px;	
+}

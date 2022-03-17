@@ -12,12 +12,20 @@
 	<a href="/">Home</a>
 	<h1>FleeMan</h1>
 	<hr />
-	<canvas id="playarea" width="450" height="450">
-		Canvas elements are required (2d context).
-	</canvas>
-	<p>Score: <span id="score"></span></p>
-	<p>High Score: <span id="highScore"></span></p>
-	<h2 id="gameover">&nbsp;</h2>
+	<div class="game-container">
+		<div class="game-canvas">
+			<canvas id="playarea" width="450" height="450">
+				Canvas elements are required (2d context).
+			</canvas>
+		</div>
+		<div class="game-info">
+			<p>Score: <span id="score"></span></p>
+			<p>High Score: <span id="highScore"></span></p>
+			<p>Level: <span id="level"></span></p>
+			<h2 id="gameover">&nbsp;</h2>
+		</div>
+	</div>
+	
 	<style>
 		canvas#playarea {
 			background-image: url("./images/black-heros.jpg");
@@ -29,16 +37,7 @@
 		}
 	</style>
 	<hr />
-	<p>Controls:</p>
-	<ul>
-		<li>Left Arrow - Move left</li>
-		<li>Right Arrow - Move right</li>
-		<li>Spacebar - reset game after game over</li>
-	</ul>
-	<p>Use the bottom
-		<b>Red Block</b>
-		to avoid the falling
-		<b>Yellow Blocks</b>.</p>	
+		
 </body>
 </html>
 
