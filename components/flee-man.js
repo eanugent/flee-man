@@ -9,7 +9,8 @@ class FleeMan {
 		this.playWidth = this.screenWidth - this.avatarWidth;
 		this.playHeight = this.screenHeight - this.avatarHeight;
 		this.blockColor = 'rgb(255, 255, 0)';
-		this.avatarColor ='rgb(128, 128, 0)';
+		this.avatarColor ='rgb(255, 0, 0)';
+		this.highScore = 0;
 
 		let canvas = document.querySelector('#playarea');
 		if(!canvas.getContext) {
@@ -102,7 +103,11 @@ class FleeMan {
 				|| this.avatar.x + this.avatar.w < block.x)) {
 					console.log('flee-man collision: ', this.avatar, ' | ', block);
 					this.running = false;
-					this.querySelector('#gameover').innerHTML = 'Game Over';
+					document.querySelector('#gameover').innerHTML = 'Game Over';
+					if(this.score>this.highScore){
+						 this.highScore = this.score;
+						 document.querySelector('#highScore').innerHTML = this.highScore;						 
+					}
 					return;
 				}
 			}
@@ -110,7 +115,7 @@ class FleeMan {
 
 		// Blocks that hit the avatar
 		while(this.blocks.length > 0 && this.blocks[0].y > this.playHeight) {
-			this.score++;
+			this.score = this.score + 1;
 			this.blocks.shift();
 		}
 
