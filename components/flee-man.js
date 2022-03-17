@@ -1,6 +1,6 @@
 class FleeMan {
 	initialize() {
-		this.screenWidth = 1200;	
+		this.screenWidth = 450;	
 		this.screenHeight = 450;
 		this.avatarWidth = 50;
 		this.avatarHeight = 50;
@@ -63,7 +63,6 @@ class FleeMan {
 		};
 		this.blocks.push(newBlock);
 		this.blocks_cnt++;
-
 		let time = 1000 - this.blocks_cnt * 10;
 		if(time < 100)
 			time = 100;
