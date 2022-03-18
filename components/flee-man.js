@@ -92,9 +92,7 @@ class FleeMan {
 		this.avatar.x = Math.min(this.playWidth, this.avatar.x);
 		this.avatar.x = Math.max(0, this.avatar.x);
 
-		// Draw avatar at new location
-		this.context.fillStyle = this.avatarColor;
-		this.context.fillRect(this.avatar.x, this.avatar.y, this.avatar.w, this.avatar.h);
+		this.drawAvatar();
 
 		// Draw existing blocks
 		for(let i = 0; i < this.blocks.length; i++) {
@@ -131,6 +129,68 @@ class FleeMan {
 		
 		document.querySelector('#level').innerHTML = this.level;
 		window.requestAnimationFrame(() => this.render());
+	}
+
+	drawAvatar(){
+		this.context.fillStyle = this.avatarColor;
+		this.context.fillRect(this.avatar.x + 15, this.avatar.y, 20, 15);
+
+		// Face
+		this.context.fillStyle = 'white';
+		this.context.fillRect(this.avatar.x + 17, this.avatar.y + 3, 5, 4);
+		this.context.fillRect(this.avatar.x + 29, this.avatar.y + 3, 5, 4);
+		this.context.fillRect(this.avatar.x + 22, this.avatar.y + 10, 6, 3);
+
+		// Hair
+		this.context.strokeStyle = this.avatarColor;
+		
+		this.context.beginPath();
+		this.context.moveTo(this.avatar.x + 15, this.avatar.y + 2);
+		this.context.lineTo(this.avatar.x + 5, this.avatar.y + 10);
+		this.context.stroke();
+
+		this.context.beginPath();
+		this.context.moveTo(this.avatar.x + 15, this.avatar.y + 5);
+		this.context.lineTo(this.avatar.x + 8, this.avatar.y + 10);
+		this.context.stroke();
+
+		this.context.beginPath();
+		this.context.moveTo(this.avatar.x + 15, this.avatar.y + 8);
+		this.context.lineTo(this.avatar.x + 11, this.avatar.y + 10);
+		this.context.stroke();
+
+		this.context.beginPath();
+		this.context.moveTo(this.avatar.x + 35, this.avatar.y + 2);
+		this.context.lineTo(this.avatar.x + 45, this.avatar.y + 10);
+		this.context.stroke();
+
+		this.context.beginPath();
+		this.context.moveTo(this.avatar.x + 35, this.avatar.y + 5);
+		this.context.lineTo(this.avatar.x + 42, this.avatar.y + 10);
+		this.context.stroke();
+
+		this.context.beginPath();
+		this.context.moveTo(this.avatar.x + 35, this.avatar.y + 8);
+		this.context.lineTo(this.avatar.x + 39, this.avatar.y + 10);
+		this.context.stroke();
+
+		// Dress
+		this.context.fillStyle = this.avatarColor;
+		let region = new Path2D();
+		region.moveTo(this.avatar.x + 15, this.avatar.y + 15);
+		region.lineTo(this.avatar.x + 5, this.avatar.y + 35);
+		region.lineTo(this.avatar.x + 45, this.avatar.y + 35);
+		region.lineTo(this.avatar.x + 35, this.avatar.y + 15);
+		region.closePath();		
+		this.context.fill(region);
+
+		// Arms
+		this.context.fillRect(this.avatar.x + 5, this.avatar.y + 20, 10, 5);
+		this.context.fillRect(this.avatar.x + 35, this.avatar.y + 20, 10, 5);
+		
+		// Legs
+		this.context.fillRect(this.avatar.x + 15, this.avatar.y + 35, 5, 10);
+		this.context.fillRect(this.avatar.x + 30, this.avatar.y + 35, 5, 10);
 	}
 
 	keyDown(ev) {
