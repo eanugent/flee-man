@@ -41,7 +41,6 @@ class FleeMan {
 		this.blocks = [];
 		this.running = true;
 		this.score = 0;
-		this.blocks_cnt = 0;
 		this.level = 1;
 
 		if(this.blockInterval)
@@ -49,6 +48,7 @@ class FleeMan {
 
 		this.blockInterval = window.setTimeout(() => this.addBlock(), 1000);
 
+		document.querySelector('#score').innerHTML = this.score;
 		if(this.levelInterval)
 			window.clearInterval(this.levelInterval);
 
@@ -72,8 +72,7 @@ class FleeMan {
 			inc: 10
 		};
 		this.blocks.push(newBlock);
-		this.blocks_cnt++;
-		let time = 1066 - (66 * this.level) - this.blocks_cnt * 10;
+		let time = 1066 - (66 * this.level);
 		if(time < 100)
 			time = 100;
 		this.blockInterval = window.setTimeout(() => this.addBlock(), time);
@@ -104,19 +103,18 @@ class FleeMan {
 				this.context.fillRect(block.x, block.y, block.w, block.h);
 			}
 
-			if(this.avatar.y < block.y + block.h) {
-				if(block.y <= this.playHeight
+			// Collision between block and avatar
+			if(this.avatar.y < block.y + block.h
+				&& block.y <= this.playHeight
 				&& !(this.avatar.x > block.x + block.w
 				|| this.avatar.x + this.avatar.w < block.x)) {
-					console.log('flee-man collision: ', this.avatar, ' | ', block);
 					this.running = false;
 					document.querySelector('#gameover').innerHTML = 'Game Over';
-					if(this.score>this.highScore){
+					if(this.score > this.highScore){
 						 this.highScore = this.score;
 						 document.querySelector('#highScore').innerHTML = this.highScore;						 
 					}
 					return;
-				}
 			}
 		}
 
